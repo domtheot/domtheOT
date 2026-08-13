@@ -1,0 +1,8 @@
+# robots.txt for Dom the OT
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://domtheot.com/sitemap.xml
