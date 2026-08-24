@@ -54,7 +54,7 @@ export default function AboutContent() {
         <div className="container">
           <div className="meet animate-on-scroll">
             <Image
-              src="/images/dominique-portrait.jpg"
+              src="/images/dominique-portrait.png"
               alt="Dominique Alexis — Board-Certified Occupational Therapist and Certified Doula"
               width={400}
               height={500}

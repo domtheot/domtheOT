@@ -28,7 +28,7 @@ export async function POST(request) {
     }
 
     // Required fields check
-    if (!firstName || !lastName || !email || !service || !message) {
+    if (!firstName || !lastName || !email || !phone || !service || !message) {
       return NextResponse.json({ success: false, error: 'Required fields are missing' }, { status: 400 });
     }
 

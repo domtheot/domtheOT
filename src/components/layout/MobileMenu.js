@@ -38,10 +38,10 @@ export default function MobileMenu({ isOpen, onClose, navLinks, services }) {
     >
       <div className="mobile-menu__header">
         <Image
-          src="/images/logo.png"
+          src="/images/logo.svg"
           alt="Dom the OT"
-          width={140}
-          height={38}
+          width={160}
+          height={48}
         />
         <button
           className="mobile-menu__close"

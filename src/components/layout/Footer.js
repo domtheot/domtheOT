@@ -12,10 +12,10 @@ export default function Footer() {
           {/* Brand Column */}
           <div>
             <Image
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Dom the OT"
-              width={140}
-              height={40}
+              width={180}
+              height={54}
               className="footer__logo"
             />
             <p className="footer__brand-description">

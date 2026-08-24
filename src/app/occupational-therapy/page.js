@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Activity,
@@ -20,7 +21,7 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const areasOfGrowth = [
   {
-    icon: Activity,
+    logoIcon: '/images/icon-logo-child.png',
     title: 'Gross Motor Skills',
     color: 'green',
     description:
@@ -28,7 +29,7 @@ const areasOfGrowth = [
     examples: ['Balance & coordination', 'Strength building', 'Body awareness', 'Motor planning'],
   },
   {
-    icon: Bath,
+    logoIcon: '/images/icon-logo-hand.png',
     title: 'Hygiene & Daily Life Skills',
     color: 'amber',
     description:
@@ -36,7 +37,7 @@ const areasOfGrowth = [
     examples: ['Self-feeding skills', 'Dressing & grooming', 'Toileting routines', 'Personal hygiene'],
   },
   {
-    icon: Puzzle,
+    logoIcon: '/images/icon-logo-cube.png',
     title: 'Fine Motor Skills',
     color: 'purple',
     description:
@@ -44,7 +45,7 @@ const areasOfGrowth = [
     examples: ['Handwriting', 'Scissor skills', 'Hand strength', 'Visual-motor integration'],
   },
   {
-    icon: Wind,
+    logoIcon: '/images/icon-logo-swing.png',
     title: 'Sensory Processing',
     color: 'magenta',
     description:
@@ -147,7 +148,7 @@ export default function OccupationalTherapyPage() {
       <section className="section section--cream">
         <div className="container container--narrow">
           <div className="animate-on-scroll">
-            <p className="section-label section-label--green">Understanding OT</p>
+            <p className="section-label section-label--green text-center">Understanding OT</p>
             <h2>What Is Occupational Therapy?</h2>
             <p style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-lg)', lineHeight: 'var(--leading-relaxed)' }}>
               For children, &quot;occupation&quot; means everything they need to do in
@@ -183,8 +184,14 @@ export default function OccupationalTherapyPage() {
                 key={area.title}
                 className={`card card--service card--${area.color} animate-on-scroll animate-on-scroll--delay-${(i % 2) + 1}`}
               >
-                <div className={`card__icon card__icon--${area.color}`}>
-                  <area.icon size={28} />
+                <div className={`card__logo-icon-wrap card__logo-icon-wrap--${area.color}`}>
+                  <Image
+                    src={area.logoIcon}
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="card__logo-icon"
+                  />
                 </div>
                 <h3 className="card__title">{area.title}</h3>
                 <p className="card__description">{area.description}</p>
@@ -272,7 +279,7 @@ export default function OccupationalTherapyPage() {
       </section>
 
       {/* Early Steps Provider */}
-      <section className="section section--charcoal">
+      <section className="section section--charcoal" id="early-steps">
         <div className="container container--narrow text-center animate-on-scroll">
           <div
             className="badge badge--green"

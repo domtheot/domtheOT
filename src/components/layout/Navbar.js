@@ -73,10 +73,10 @@ export default function Navbar() {
         <div className="nav__inner">
           <Link href="/" aria-label="Dom the OT — Home">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Dom the OT"
-              width={160}
-              height={44}
+              width={200}
+              height={60}
               className="nav__logo"
               priority
             />

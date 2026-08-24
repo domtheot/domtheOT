@@ -3,10 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Activity,
-  Bath,
-  Puzzle,
-  Wind,
   Heart,
   Users,
   BookOpen,
@@ -18,6 +14,7 @@ import {
   ArrowRight,
   Star,
   CheckCircle,
+  ChevronRight,
 } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
@@ -27,7 +24,7 @@ const services = [
     tag: 'Pediatric OT',
     description:
       'Evidence-based pediatric OT helping children ages 0–21 develop the skills they need to thrive at home, school, and in the community.',
-    icon: Activity,
+    logoIcon: '/images/icon-logo-child.png',
     color: 'green',
     href: '/occupational-therapy',
   },
@@ -36,7 +33,7 @@ const services = [
     tag: 'Daily Skills',
     description:
       'Supporting hygiene, self-care routines, and functional independence through family-centered, practical guidance.',
-    icon: Bath,
+    logoIcon: '/images/icon-logo-hand.png',
     color: 'amber',
     href: '/occupational-therapy',
   },
@@ -45,7 +42,7 @@ const services = [
     tag: 'Early Childhood',
     description:
       'Timely, culturally relevant services for infants and toddlers with developmental delays or special needs.',
-    icon: Puzzle,
+    logoIcon: '/images/icon-logo-cube.png',
     color: 'purple',
     href: '/occupational-therapy',
   },
@@ -54,7 +51,7 @@ const services = [
     tag: 'Sensory Support',
     description:
       'Helping children regulate sensory input to improve attention, behavior, and participation in everyday activities.',
-    icon: Wind,
+    logoIcon: '/images/icon-logo-swing.png',
     color: 'magenta',
     href: '/occupational-therapy',
   },
@@ -141,7 +138,7 @@ export default function HomePage() {
     '@type': 'MedicalBusiness',
     'name': 'Dom the OT LLC',
     'alternateName': 'Dom the OT',
-    'image': 'https://domtheot.com/images/dominique-portrait.jpg',
+    'image': 'https://domtheot.com/images/dominique-portrait.png',
     'logo': 'https://domtheot.com/images/logo.png',
     'url': 'https://domtheot.com',
     'telephone': '(786) 390-6614',
@@ -251,48 +248,73 @@ export default function HomePage() {
                 />
               </div>
 
-              {/* Floating credential cards */}
-              <div className="hero__card hero__card--ot">
+              {/* Floating credential cards — Clickable Links */}
+              <Link
+                href="/occupational-therapy"
+                className="hero__card hero__card--ot"
+                title="Explore Pediatric Occupational Therapy Services"
+              >
                 <div className="hero__card-dot hero__card-dot--green" />
                 <div>
                   <div className="hero__card-label">Certified OT</div>
                   <div className="hero__card-value">10+ Years</div>
                 </div>
-              </div>
+                <ChevronRight size={13} className="hero__card-chevron" />
+              </Link>
 
-              <div className="hero__card hero__card--doula">
+              <Link
+                href="/doula-services"
+                className="hero__card hero__card--doula"
+                title="Explore Certified Birth & Postpartum Doula Services"
+              >
                 <div className="hero__card-dot hero__card-dot--sage" />
                 <div>
                   <div className="hero__card-label">Birth Doula</div>
                   <div className="hero__card-value">Certified</div>
                 </div>
-              </div>
+                <ChevronRight size={13} className="hero__card-chevron" />
+              </Link>
 
-              <div className="hero__card hero__card--steps">
+              <Link
+                href="/occupational-therapy#early-steps"
+                className="hero__card hero__card--steps"
+                title="Learn about Early Steps Florida Early Intervention"
+              >
                 <div className="hero__card-dot hero__card-dot--purple" />
                 <div>
                   <div className="hero__card-label">Early Steps</div>
                   <div className="hero__card-value">FL Provider</div>
                 </div>
-              </div>
+                <ChevronRight size={13} className="hero__card-chevron" />
+              </Link>
 
-              <div className="hero__card hero__card--families">
+              <Link
+                href="/about"
+                className="hero__card hero__card--families"
+                title="Learn more About Dominique and our 500+ Families Impacted"
+              >
                 <div className="hero__card-dot hero__card-dot--amber" />
                 <div>
                   <div className="hero__card-label">Families Helped</div>
                   <div className="hero__card-value">500+</div>
                 </div>
-              </div>
+                <ChevronRight size={13} className="hero__card-chevron" />
+              </Link>
 
-              {/* Star badge */}
-              <div className="hero__rating">
+              {/* Star rating badge — Clickable Link to Client Stories */}
+              <Link
+                href="/stories"
+                className="hero__rating"
+                title="Read 5.0 Star Reviews & Client Stories"
+              >
                 <Star size={13} className="hero__rating-star" />
                 <Star size={13} className="hero__rating-star" />
                 <Star size={13} className="hero__rating-star" />
                 <Star size={13} className="hero__rating-star" />
                 <Star size={13} className="hero__rating-star" />
                 <span className="hero__rating-num">5.0</span>
-              </div>
+                <ChevronRight size={12} className="hero__card-chevron" />
+              </Link>
             </div>
           </div>
         </div>
@@ -327,7 +349,17 @@ export default function HomePage() {
               >
                 <div className="service-card__header">
                   <div className={`service-card__icon service-card__icon--${service.color}`}>
-                    <service.icon size={24} />
+                    {service.logoIcon ? (
+                      <Image
+                        src={service.logoIcon}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="service-card__logo-icon"
+                      />
+                    ) : (
+                      <service.icon size={24} />
+                    )}
                   </div>
                   <span className={`service-card__tag service-card__tag--${service.color}`}>
                     {service.tag}
@@ -351,7 +383,7 @@ export default function HomePage() {
         <div className="container">
           <div className="meet animate-on-scroll">
             <Image
-              src="/images/dominique-portrait.jpg"
+              src="/images/dominique-portrait.png"
               alt="Dominique Alexis — Board-Certified Occupational Therapist and Certified Doula"
               width={400}
               height={500}

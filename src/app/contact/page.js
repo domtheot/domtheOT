@@ -239,7 +239,7 @@ export default function ContactPage() {
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="phone" className="form-label">
+                    <label htmlFor="phone" className="form-label form-label--required">
                       Phone Number
                     </label>
                     <input
@@ -247,6 +247,7 @@ export default function ContactPage() {
                       id="phone"
                       name="phone"
                       className="form-input"
+                      required
                       placeholder="(123) 456-7890"
                     />
                   </div>
