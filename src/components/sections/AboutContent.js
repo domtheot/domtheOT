@@ -6,9 +6,8 @@ import {
   GraduationCap,
   Award,
   Heart,
-  Users,
+  Baby,
   ArrowRight,
-  Briefcase,
   BookOpen,
   Shield,
   CheckCircle,
@@ -18,10 +17,9 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 const credentials = [
   { icon: GraduationCap, text: 'Board-Certified Occupational Therapist' },
   { icon: Award, text: 'Certified Birth & Postpartum Doula' },
-  { icon: Heart, text: 'Certified Aroma Therapist' },
   { icon: Shield, text: 'Autism Spectrum Disorder Clinical Specialist' },
-  { icon: Briefcase, text: '10+ Years Pediatric Experience' },
-  { icon: Users, text: 'Provider with Early Steps Treasure Coast' },
+  { icon: Baby, text: 'Certified Breastfeeding Counselor' },
+  { icon: Heart, text: 'Certified Aroma Therapist' },
 ];
 
 const workSettings = [

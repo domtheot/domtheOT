@@ -607,6 +607,88 @@ p {
   object-fit: cover;
 }
 
+.approaches-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.approach-card {
+  background: var(--color-warm-white);
+  border: 2px solid var(--color-sand);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 0 var(--color-sand);
+  overflow: hidden;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.approach-card[open] {
+  border-color: var(--color-amber);
+  box-shadow: 0 4px 0 var(--color-amber-soft);
+}
+
+.approach-card__summary {
+  min-height: 126px;
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: var(--space-4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.approach-card__summary::-webkit-details-marker {
+  display: none;
+}
+
+.approach-card__summary:hover {
+  background: var(--color-amber-soft);
+}
+
+.approach-card__icon {
+  color: var(--color-charcoal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.approach-card__title {
+  font-weight: 700;
+  text-align: center;
+}
+
+.approach-card__toggle {
+  color: var(--color-amber-dark);
+  transition: transform var(--transition-fast);
+}
+
+.approach-card[open] .approach-card__toggle {
+  transform: rotate(45deg);
+}
+
+.approach-card__content {
+  padding: 0 var(--space-6) var(--space-6);
+  border-top: 1px solid var(--color-sand);
+}
+
+.approach-card__content p {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+@media (max-width: 760px) {
+  .approaches-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .approach-card__summary {
+    min-height: 100px;
+  }
+}
+
 /* Premium Overhauled Services Grid & Cards */
 .services-grid {
   display: grid;

@@ -55,13 +55,48 @@ const areasOfGrowth = [
 ];
 
 const approaches = [
-  { name: 'Infant Massage', icon: Baby },
-  { name: 'Primitive Reflex Integration', icon: Activity },
-  { name: 'Rhythmic Movement Therapy', icon: Wind },
-  { name: 'Trauma-Informed Care', icon: Shield },
-  { name: 'Zones of Regulation', icon: Brain },
-  { name: 'Handwriting Without Tears', icon: BookOpen },
-  { name: 'ASD Clinical Specialist', icon: Puzzle },
+  {
+    name: 'Infant Massage',
+    icon: Baby,
+    benefits: 'Promotes bonding, body awareness, relaxation, and positive sensory experiences while supporting an infant’s developing ability to interact with their environment.',
+    application: 'I incorporate gentle, developmentally appropriate massage techniques and caregiver education to support sensory regulation, body awareness, calming routines, and positive caregiver-child interaction.',
+  },
+  {
+    name: 'Primitive Reflex Integration',
+    icon: Activity,
+    benefits: 'Supports foundational motor patterns by addressing retained primitive reflexes that may interfere with coordination, balance, posture, body awareness, and motor planning.',
+    application: 'I incorporate reflex-based movements into therapeutic play and functional activities to support postural control, bilateral coordination, motor planning, and participation.',
+  },
+  {
+    name: 'Rhythmic Movement Therapy',
+    icon: Wind,
+    benefits: 'Uses rhythmic, repetitive movements to support body awareness, coordination, balance, motor planning, attention, and regulation.',
+    application: 'I incorporate rhythmic movement patterns into therapeutic activities to build foundational motor skills, bilateral coordination, postural control, sensory regulation, and readiness for learning.',
+  },
+  {
+    name: 'Trauma-Informed Care',
+    icon: Shield,
+    benefits: 'Creates a safe, predictable, and respectful environment that considers how stress and past experiences can affect regulation, behavior, relationships, and participation.',
+    application: 'I prioritize emotional and physical safety, predictable routines, choice, connection, and child-led participation while adapting activities to each child’s needs and responses.',
+  },
+  {
+    name: 'Zones of Regulation',
+    icon: Brain,
+    benefits: 'Teaches children to recognize emotions and body cues, understand their level of regulation, and develop strategies to manage their responses.',
+    application: 'I help children identify emotions and regulation states and practice individualized coping strategies through play, movement, visual supports, transitions, and real-life social situations.',
+  },
+  {
+    name: 'Handwriting Without Tears',
+    icon: BookOpen,
+    benefits: 'Provides a structured, multisensory approach to handwriting readiness, letter formation, pencil control, visual-motor skills, and fine motor coordination.',
+    application: 'I use developmentally appropriate activities, manipulatives, and structured instruction to build pre-writing and handwriting skills while addressing grasp, fine motor control, and visual-motor integration.',
+  },
+  {
+    name: 'ASD Clinical Specialist',
+    icon: Puzzle,
+    benefits: 'Provides specialized knowledge for supporting autistic children with sensory processing, communication, social participation, emotional regulation, motor development, and daily living skills.',
+    application: 'I use an individualized, neurodiversity-affirming approach that considers each child’s communication style, sensory needs, strengths, interests, and developmental profile.',
+  },
 ];
 
 const servicePillars = [
@@ -256,23 +291,24 @@ export default function OccupationalTherapyPage() {
             </p>
           </div>
 
-          <div className="grid grid--4" style={{ marginTop: 'var(--space-12)' }}>
+          <div className="approaches-grid" style={{ marginTop: 'var(--space-12)' }}>
             {approaches.map((approach, i) => (
-              <div
+              <details
                 key={approach.name}
-                className={`card card--flat animate-on-scroll animate-on-scroll--delay-${(i % 4) + 1}`}
-                style={{ textAlign: 'center', padding: 'var(--space-6)' }}
+                className={`approach-card animate-on-scroll animate-on-scroll--delay-${(i % 4) + 1}`}
               >
-                <div
-                  className="card__icon card__icon--amber"
-                  style={{ margin: '0 auto var(--space-3)' }}
-                >
-                  <approach.icon size={20} />
+                <summary className="approach-card__summary">
+                  <span className="approach-card__icon">
+                    <approach.icon size={22} />
+                  </span>
+                  <span className="approach-card__title">{approach.name}</span>
+                  <Plus size={20} className="approach-card__toggle" aria-hidden="true" />
+                </summary>
+                <div className="approach-card__content">
+                  <p><strong>Benefits:</strong> {approach.benefits}</p>
+                  <p><strong>In My Practice:</strong> {approach.application}</p>
                 </div>
-                <p style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>
-                  {approach.name}
-                </p>
-              </div>
+              </details>
             ))}
           </div>
         </div>
