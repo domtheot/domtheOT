@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Heart,
@@ -96,6 +97,14 @@ export default function DoulaServicesPage() {
       {/* Page Header */}
       <section className="page-header section--sage-soft">
         <div className="container">
+          <Image
+            src="/images/soul-haven-logo.svg"
+            alt="Soul Haven"
+            width={150}
+            height={188}
+            className="doula-hero__logo animate-on-scroll"
+            priority
+          />
           <p className="section-label section-label--sage animate-on-scroll">Doula Services</p>
           <h1 className="page-header__title animate-on-scroll">
             Compassionate Birth & Postpartum Support
@@ -116,7 +125,7 @@ export default function DoulaServicesPage() {
       <section className="section section--cream">
         <div className="container container--narrow">
           <div className="animate-on-scroll">
-            <p className="section-label">Understanding Doula Support</p>
+            <p className="section-label section-label--centered">Understanding Doula Support</p>
             <h2>What Is a Doula?</h2>
             <p style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-lg)', lineHeight: 'var(--leading-relaxed)' }}>
               A doula is a trained professional who provides continuous physical,

@@ -148,7 +148,7 @@ export default function OccupationalTherapyPage() {
       <section className="section section--cream">
         <div className="container container--narrow">
           <div className="animate-on-scroll">
-            <p className="section-label section-label--green text-center">Understanding OT</p>
+            <p className="section-label section-label--green section-label--centered">Understanding OT</p>
             <h2>What Is Occupational Therapy?</h2>
             <p style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-lg)', lineHeight: 'var(--leading-relaxed)' }}>
               For children, &quot;occupation&quot; means everything they need to do in

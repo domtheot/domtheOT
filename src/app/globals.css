@@ -260,6 +260,11 @@ p {
 .section-label--purple { color: var(--color-purple); }
 .section-label--magenta { color: var(--color-magenta); }
 .section-label--sage { color: var(--color-sage); }
+.section-label--centered {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
 
 /* ============================================
    Layout
@@ -2419,6 +2424,13 @@ p {
   font-size: var(--text-lg);
   color: var(--color-warm-gray);
   line-height: var(--leading-relaxed);
+}
+
+.doula-hero__logo {
+  display: block;
+  width: clamp(112px, 10vw, 150px);
+  height: auto;
+  margin: 0 auto var(--space-5);
 }
 
 /* ============================================
