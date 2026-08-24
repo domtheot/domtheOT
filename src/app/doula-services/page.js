@@ -96,28 +96,30 @@ export default function DoulaServicesPage() {
     <div ref={scrollRef}>
       {/* Page Header */}
       <section className="page-header section--sage-soft">
-        <div className="container">
+        <div className="container doula-hero__inner">
+          <div className="doula-hero__content">
+            <p className="section-label section-label--sage animate-on-scroll">Doula Services</p>
+            <h1 className="page-header__title animate-on-scroll">
+              Compassionate Birth & Postpartum Support
+            </h1>
+            <p className="page-header__subtitle animate-on-scroll">
+              Certified birth and postpartum doula care combined with the clinical
+              insight of an experienced occupational therapist.
+            </p>
+            <div style={{ marginTop: 'var(--space-8)' }} className="animate-on-scroll">
+              <Link href="/contact" className="btn btn--sage btn--lg">
+                Request Doula Support <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
           <Image
             src="/images/soul-haven-logo.svg"
             alt="Soul Haven"
-            width={150}
-            height={188}
+            width={220}
+            height={275}
             className="doula-hero__logo animate-on-scroll"
             priority
           />
-          <p className="section-label section-label--sage animate-on-scroll">Doula Services</p>
-          <h1 className="page-header__title animate-on-scroll">
-            Compassionate Birth & Postpartum Support
-          </h1>
-          <p className="page-header__subtitle animate-on-scroll">
-            Certified birth and postpartum doula care combined with the clinical
-            insight of an experienced occupational therapist.
-          </p>
-          <div style={{ marginTop: 'var(--space-8)' }} className="animate-on-scroll">
-            <Link href="/contact" className="btn btn--sage btn--lg">
-              Request Doula Support <ArrowRight size={16} />
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -126,7 +128,7 @@ export default function DoulaServicesPage() {
         <div className="container container--narrow">
           <div className="animate-on-scroll">
             <p className="section-label section-label--centered">Understanding Doula Support</p>
-            <h2>What Is a Doula?</h2>
+            <h2 className="text-center">What Is a Doula?</h2>
             <p style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-lg)', lineHeight: 'var(--leading-relaxed)' }}>
               A doula is a trained professional who provides continuous physical,
               emotional, and informational support to a birthing person before, during,
