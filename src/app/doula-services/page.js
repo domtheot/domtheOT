@@ -96,36 +96,26 @@ export default function DoulaServicesPage() {
     <div ref={scrollRef}>
       {/* Page Header */}
       <section className="page-header section--sage-soft">
-        <div className="container doula-hero__inner">
-          <div className="doula-hero__content">
-            <p className="section-label section-label--sage animate-on-scroll">Doula Services</p>
-            <h1 className="page-header__title animate-on-scroll">
-              Compassionate Birth & Postpartum Support
-            </h1>
-            <p className="page-header__subtitle animate-on-scroll">
-              Certified birth and postpartum doula care combined with the clinical
-              insight of an experienced occupational therapist.
-            </p>
-            <div style={{ marginTop: 'var(--space-8)' }} className="animate-on-scroll">
-              <Link href="/contact" className="btn btn--sage btn--lg">
-                Request Doula Support <ArrowRight size={16} />
-              </Link>
-            </div>
+        <div className="container">
+          <p className="section-label section-label--sage animate-on-scroll">Doula Services</p>
+          <h1 className="page-header__title animate-on-scroll">
+            Compassionate Birth & Postpartum Support
+          </h1>
+          <p className="page-header__subtitle animate-on-scroll">
+            Certified birth and postpartum doula care combined with the clinical
+            insight of an experienced occupational therapist.
+          </p>
+          <div style={{ marginTop: 'var(--space-8)' }} className="animate-on-scroll">
+            <Link href="/contact" className="btn btn--sage btn--lg">
+              Request Doula Support <ArrowRight size={16} />
+            </Link>
           </div>
-          <Image
-            src="/images/soul-haven-logo.svg"
-            alt="Soul Haven"
-            width={220}
-            height={275}
-            className="doula-hero__logo animate-on-scroll"
-            priority
-          />
         </div>
       </section>
 
       {/* What is a Doula */}
       <section className="section section--cream">
-        <div className="container container--narrow">
+        <div className="container doula-intro__inner">
           <div className="animate-on-scroll">
             <p className="section-label section-label--centered">Understanding Doula Support</p>
             <h2 className="text-center">What Is a Doula?</h2>
@@ -142,6 +132,13 @@ export default function DoulaServicesPage() {
               and improved postpartum outcomes.
             </p>
           </div>
+          <Image
+            src="/images/soul-haven-logo.svg"
+            alt="Soul Haven"
+            width={240}
+            height={300}
+            className="doula-intro__logo animate-on-scroll"
+          />
         </div>
       </section>
 

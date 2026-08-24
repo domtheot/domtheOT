@@ -2426,33 +2426,29 @@ p {
   line-height: var(--leading-relaxed);
 }
 
-.doula-hero__inner {
+.doula-intro__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+  grid-template-columns: minmax(0, 760px) minmax(200px, 280px);
+  justify-content: center;
   align-items: center;
   gap: clamp(var(--space-8), 5vw, var(--space-16));
 }
 
-.doula-hero__content {
-  text-align: center;
-}
-
-.doula-hero__logo {
+.doula-intro__logo {
   display: block;
-  width: clamp(180px, 15vw, 220px);
+  width: clamp(200px, 17vw, 240px);
   height: auto;
   margin: 0 auto;
 }
 
 @media (max-width: 800px) {
-  .doula-hero__inner {
+  .doula-intro__inner {
     grid-template-columns: 1fr;
   }
 
-  .doula-hero__logo {
-    grid-row: 1;
-    width: 140px;
-    margin-bottom: var(--space-4);
+  .doula-intro__logo {
+    width: 160px;
+    margin-top: var(--space-6);
   }
 }
 
