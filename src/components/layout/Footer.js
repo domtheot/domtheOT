@@ -11,13 +11,15 @@ export default function Footer() {
         <div className="footer__grid">
           {/* Brand Column */}
           <div>
-            <Image
-              src="/images/logo.svg"
-              alt="Dom the OT"
-              width={180}
-              height={54}
-              className="footer__logo"
-            />
+            <div className="footer__logo-wrap">
+              <Image
+                src="/images/logo_no_llc.png"
+                alt="Dom the OT Pediatric Occupational Therapy"
+                width={180}
+                height={89}
+                className="footer__logo"
+              />
+            </div>
             <p className="footer__brand-description">
               Empowering children and families through evidence-based occupational
               therapy, compassionate doula support, and culturally relevant care.

@@ -1214,10 +1214,18 @@ p {
   max-width: 300px;
 }
 
+.footer__logo-wrap {
+  display: inline-flex;
+  padding: 8px 10px;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+}
+
 .footer__logo {
-  height: 40px;
+  display: block;
+  height: 72px;
   width: auto;
-  filter: brightness(0) invert(1);
+  object-fit: contain;
 }
 
 .footer__heading {
