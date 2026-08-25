@@ -401,8 +401,13 @@ export default function ContactPage() {
                       <Phone size={18} />
                     </div>
                     <div>
-                      <p style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>(786) 390-6614</p>
-                      <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-warm-gray)' }}>Call or text</p>
+                      <p style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>
+                        (786) 390-6614 <span style={{ color: 'var(--color-green-dark)' }} aria-hidden="true">*</span>
+                        <span className="sr-only"> — preferred contact method</span>
+                      </p>
+                      <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-warm-gray)' }}>
+                        Call or text · Preferred contact method
+                      </p>
                     </div>
                   </a>
                   <a
