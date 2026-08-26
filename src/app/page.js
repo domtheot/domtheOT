@@ -167,8 +167,7 @@ export default function HomePage() {
     },
     'sameAs': [
       'https://instagram.com',
-      'https://facebook.com',
-      'https://linkedin.com'
+      'https://facebook.com'
     ],
     'priceRange': '$$',
     'medicalSpecialty': [
