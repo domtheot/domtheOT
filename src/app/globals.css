@@ -2517,28 +2517,70 @@ p {
 }
 
 .doula-intro__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 760px) minmax(200px, 280px);
-  justify-content: center;
+  position: relative;
+  min-height: 470px;
+  display: flex;
   align-items: center;
-  gap: clamp(var(--space-8), 5vw, var(--space-16));
+}
+
+.doula-intro__content {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.doula-intro__brand {
+  position: absolute;
+  top: 50%;
+  right: clamp(var(--space-2), 2vw, var(--space-6));
+  width: clamp(190px, 15vw, 230px);
+  transform: translateY(-50%);
+  text-align: center;
 }
 
 .doula-intro__logo {
   display: block;
-  width: clamp(200px, 17vw, 240px);
+  width: 100%;
   height: auto;
-  margin: 0 auto;
 }
 
-@media (max-width: 800px) {
+.doula-intro__brand-story {
+  margin-top: var(--space-3);
+}
+
+.doula-intro__brand-story h3 {
+  font-size: var(--text-base);
+  color: var(--color-sage-dark);
+  margin-bottom: var(--space-2);
+}
+
+.doula-intro__brand-story p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-warm-gray);
+}
+
+@media (max-width: 1180px) {
   .doula-intro__inner {
-    grid-template-columns: 1fr;
+    min-height: 0;
+    display: block;
+  }
+
+  .doula-intro__content {
+    width: min(100%, 760px);
+  }
+
+  .doula-intro__brand {
+    position: static;
+    width: min(100%, 360px);
+    margin-top: var(--space-6);
+    margin-right: auto;
+    margin-left: auto;
+    transform: none;
   }
 
   .doula-intro__logo {
-    width: 160px;
-    margin-top: var(--space-6);
+    width: 170px;
+    margin: 0 auto;
   }
 }
 

@@ -4,14 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   Heart,
-  Users,
   Baby,
   Shield,
   BookOpen,
   ArrowRight,
   CheckCircle,
   Plus,
-  Flower2,
   HandHeart,
   MessageCircle,
 } from 'lucide-react';
@@ -26,15 +24,9 @@ const supportAreas = [
   },
   {
     icon: HandHeart,
-    title: 'Birth Support',
+    title: 'Birth Prep',
     description:
-      'Continuous presence during labor and delivery, comfort measures, breathing techniques, and advocacy for your birth preferences.',
-  },
-  {
-    icon: Users,
-    title: 'Partner Support',
-    description:
-      'Helping partners feel confident and included, with practical tools and emotional coaching for active participation.',
+      'Preparing your birth preferences, comfort measures, breathing techniques, partner roles, and advocacy tools for labor and delivery.',
   },
   {
     icon: Heart,
@@ -43,16 +35,10 @@ const supportAreas = [
       'Recovery support, newborn care guidance, establishing routines, and emotional check-ins during those critical early weeks.',
   },
   {
-    icon: Flower2,
-    title: 'Aroma Therapy',
-    description:
-      'Evidence-based aromatherapy techniques to support relaxation, comfort, and emotional well-being during pregnancy and birth.',
-  },
-  {
     icon: MessageCircle,
     title: 'Advocacy & Education',
     description:
-      'Helping you understand your options, communicate with your care team, and feel empowered in every decision.',
+      'Helping you understand your options and communicate with your care team, with added education from a certified breastfeeding counselor and certified aroma therapist.',
   },
 ];
 
@@ -116,7 +102,7 @@ export default function DoulaServicesPage() {
       {/* What is a Doula */}
       <section className="section section--cream">
         <div className="container doula-intro__inner">
-          <div className="animate-on-scroll">
+          <div className="doula-intro__content animate-on-scroll">
             <p className="section-label section-label--centered">Understanding Doula Support</p>
             <h2 className="text-center">What Is a Doula?</h2>
             <p style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-lg)', lineHeight: 'var(--leading-relaxed)' }}>
@@ -132,13 +118,25 @@ export default function DoulaServicesPage() {
               and improved postpartum outcomes.
             </p>
           </div>
-          <Image
-            src="/images/soul-haven-logo.svg"
-            alt="Soul Haven"
-            width={240}
-            height={300}
-            className="doula-intro__logo animate-on-scroll"
-          />
+          <aside className="doula-intro__brand animate-on-scroll" aria-label="The story behind Soul Haven">
+            <Image
+              src="/images/soul-haven-logo.svg"
+              alt="Soul Haven Birth and Postpartum Doula"
+              width={240}
+              height={300}
+              className="doula-intro__logo"
+            />
+            <div className="doula-intro__brand-story">
+              <h3>Why the Safety Pin</h3>
+              <p>
+                Soul Haven was inspired by a client who gave Dominique a safety-pin
+                brooch after feeling safe and supported through her first pregnancy
+                and subsequent loss. It remains a symbol of the compassionate,
+                trustworthy space Dominique creates for families during life&apos;s most
+                vulnerable transitions.
+              </p>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -193,11 +191,11 @@ export default function DoulaServicesPage() {
             <h2>What Working Together Looks Like</h2>
           </div>
 
-          <div className="grid grid--3" style={{ marginTop: 'var(--space-12)' }}>
+          <div className="grid grid--2" style={{ marginTop: 'var(--space-12)' }}>
             {supportAreas.map((area, i) => (
               <div
                 key={area.title}
-                className={`card card--service card--sage animate-on-scroll animate-on-scroll--delay-${(i % 3) + 1}`}
+                className={`card card--service card--sage animate-on-scroll animate-on-scroll--delay-${(i % 2) + 1}`}
               >
                 <div className="card__icon card__icon--sage">
                   <area.icon size={24} />

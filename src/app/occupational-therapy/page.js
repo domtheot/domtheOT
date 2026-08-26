@@ -209,7 +209,8 @@ export default function OccupationalTherapyPage() {
             <h2>How OT Can Help Your Child</h2>
             <p className="subtitle" style={{ margin: 'var(--space-4) auto 0' }}>
               We address the foundational skills children need to participate in
-              everyday activities with confidence and independence.
+              everyday activities with confidence and independence. Examples of skills
+              we may work on include, but are not limited to:
             </p>
           </div>
 
