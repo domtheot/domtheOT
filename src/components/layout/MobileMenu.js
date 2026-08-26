@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { X, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
+import { X, Instagram, Facebook } from 'lucide-react';
 
 export default function MobileMenu({ isOpen, onClose, navLinks, services }) {
   const menuRef = useRef(null);
@@ -126,24 +126,6 @@ export default function MobileMenu({ isOpen, onClose, navLinks, services }) {
             aria-label="Facebook"
           >
             <Facebook size={20} />
-          </a>
-          <a
-            href="https://youtube.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mobile-menu__social-link"
-            aria-label="YouTube"
-          >
-            <Youtube size={20} />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mobile-menu__social-link"
-            aria-label="LinkedIn"
-          >
-            <Linkedin size={20} />
           </a>
         </div>
       </div>

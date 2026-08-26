@@ -11,8 +11,6 @@ import {
   ArrowRight,
   Instagram,
   Facebook,
-  Youtube,
-  Linkedin,
   Clock,
 } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -450,14 +448,12 @@ export default function ContactPage() {
                 </h3>
                 <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
                   {[
-                    { Icon: Instagram, label: 'Instagram' },
-                    { Icon: Facebook, label: 'Facebook' },
-                    { Icon: Youtube, label: 'YouTube' },
-                    { Icon: Linkedin, label: 'LinkedIn' },
-                  ].map(({ Icon, label }) => (
+                    { Icon: Instagram, label: 'Instagram', href: 'https://instagram.com' },
+                    { Icon: Facebook, label: 'Facebook', href: 'https://facebook.com' },
+                  ].map(({ Icon, label, href }) => (
                     <a
                       key={label}
-                      href="#"
+                      href={href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="footer__social-link"

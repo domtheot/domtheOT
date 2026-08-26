@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Instagram, Facebook, Youtube, Linkedin, Phone, Mail, MapPin, LogIn } from 'lucide-react';
+import { Instagram, Facebook, Phone, Mail, MapPin, LogIn } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -42,24 +42,6 @@ export default function Footer() {
                 aria-label="Follow on Facebook"
               >
                 <Facebook size={18} />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer__social-link"
-                aria-label="Subscribe on YouTube"
-              >
-                <Youtube size={18} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer__social-link"
-                aria-label="Connect on LinkedIn"
-              >
-                <Linkedin size={18} />
               </a>
             </div>
           </div>
