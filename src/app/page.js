@@ -112,21 +112,21 @@ const specializedApproaches = [
 const testimonials = [
   {
     quote:
-      'Dominique has a gift for making both children and parents feel completely at ease. Her expertise in occupational therapy combined with her warm, nurturing approach transformed our family\'s daily routines.',
-    name: 'Sarah M.',
-    role: 'Parent — Pediatric OT Client',
+      'Ms Dom! One of the best OT therapists I know! Very attentive, caring, and patient—with my son and myself. She is very knowledgeable in her field and tackles every concern and question with so much grace and confidence.',
+    name: 'Josselyn Casaleno',
+    role: 'Verified Google Review',
   },
   {
     quote:
-      'Having Dominique as our doula was the best decision we made during our pregnancy. Her calm presence and knowledge made all the difference during birth and those first weeks at home.',
-    name: 'Jessica R.',
-    role: 'Parent — Doula Client',
+      'Our son worked with Dominique for over two years, and we can\'t say enough good things. From the first session, she found a way to connect with him, met him where he was, kept things playful, and he actually looked forward to going.',
+    name: 'Nethania Milhomme',
+    role: 'Verified Google Review',
   },
   {
     quote:
-      'Dom helped our son develop fine motor skills that his school therapist said would take months. Her individualized approach and the way she connects with children is truly special.',
-    name: 'Michael T.',
-    role: 'Parent — Early Intervention',
+      'I have known Dom for many years and have the pleasure to work with her. I am a speech therapist and we have shared many clients together over the years. She is an incredible OT who truly puts her clients first.',
+    name: 'Julie Sarfati',
+    role: 'Verified Google Review',
   },
 ];
 
@@ -546,8 +546,8 @@ export default function HomePage() {
       <section className="section section--cream" id="testimonials">
         <div className="container">
           <div className="text-center animate-on-scroll">
-            <p className="section-label">What Families Say</p>
-            <h2>Stories From Our Community</h2>
+            <p className="section-label">Verified Google Reviews</p>
+            <h2>What Families and Colleagues Say</h2>
           </div>
 
           <div className="grid grid--3" style={{ marginTop: 'var(--space-12)' }}>
@@ -579,7 +579,7 @@ export default function HomePage() {
 
           <div className="text-center" style={{ marginTop: 'var(--space-10)' }}>
             <Link href="/stories" className="btn btn--secondary">
-              Read More Stories <ArrowRight size={16} />
+              Read Google Reviews <ArrowRight size={16} />
             </Link>
           </div>
         </div>
