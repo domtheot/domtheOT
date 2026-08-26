@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, ExternalLink, Star } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
-const GOOGLE_REVIEWS_URL =
-  'https://www.google.com/search?q=Dom+the+OT%2C+LLC+google+reviews#lrd=0x8bc154c5ec5fe723:0xd4578351a5c50e8f,1,,,,';
+const GOOGLE_REVIEWS_URL = 'https://share.google/9ZzMwmsMSzRXCoTkp';
 
 const testimonials = [
   {
