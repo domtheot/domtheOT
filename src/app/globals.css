@@ -1727,6 +1727,26 @@ p {
   grid-column: 1 / -1;
 }
 
+.resource-link-field {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1.5px solid var(--color-sand);
+  border-radius: var(--radius-md);
+  background: var(--color-warm-white);
+}
+
+.resource-link-field:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+.resource-link-field__number {
+  color: var(--color-warm-gray);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .resource-feature-toggle input { width: 18px; height: 18px; accent-color: var(--color-lime); }
 
 .reference-marker {
@@ -1753,6 +1773,26 @@ p {
 .resource-article h1 { margin: var(--space-4) 0; }
 .resource-article__intro { font-size: var(--text-lg); color: var(--color-warm-gray); margin-bottom: var(--space-8); }
 .resource-article__body { white-space: pre-wrap; font-size: var(--text-base); line-height: 1.9; color: var(--color-charcoal); }
+.resource-article__links { margin-top: var(--space-16); padding-top: var(--space-8); border-top: 2px solid var(--color-sand); }
+.resource-article__links h2 { margin-bottom: var(--space-5); font-family: var(--font-body); font-size: var(--text-lg); letter-spacing: 0.08em; }
+.resource-article__link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.resource-article__link-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 58px;
+  padding: var(--space-3) var(--space-5);
+  border: 2px solid var(--color-green-dark);
+  border-radius: var(--radius-md);
+  background: var(--color-lime);
+  box-shadow: 0 5px 0 var(--color-green-dark);
+  color: var(--color-charcoal);
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.resource-article__link-button:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--color-green-dark); }
 .resource-empty { text-align: center; display: grid; justify-items: center; gap: var(--space-5); }
 
 @media (max-width: 1000px) {
@@ -1764,6 +1804,8 @@ p {
   .reference-card { min-height: 140px; }
   .resource-link-editor,
   .resource-link-fields { grid-template-columns: 1fr; }
+  .resource-link-field:last-child:nth-child(odd) { grid-column: auto; }
+  .resource-article__link-grid { grid-template-columns: 1fr; }
 }
 
 .status-badge--closed {

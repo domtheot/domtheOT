@@ -130,11 +130,11 @@ export default function ResourcesPage() {
   const designatedLinks = resources
     .filter((resource) => resource.featured_link)
     .flatMap((resource) => {
-      const links = resource.reference_links?.filter(Boolean) || [];
+      const links = resource.reference_links?.map((link, index) => typeof link === 'string' ? { title: `Helpful Link ${index + 1}`, url: link } : link).filter((link) => link?.url) || [];
       if (!links.length) {
         return [{ resource, href: resource.link_url || `/resources/${resource.slug || resource.id}`, external: !!resource.link_url }];
       }
-      return links.map((href, index) => ({ resource, href, external: true, index }));
+      return links.map((link, index) => ({ resource, href: link.url, linkTitle: link.title, external: true, index }));
     })
     .slice(0, 5);
 
@@ -163,11 +163,11 @@ export default function ResourcesPage() {
               <p>Keep these designated resources handy whenever you need to come back to them.</p>
             </div>
             <div className="reference-grid">
-              {designatedLinks.map(({ resource, href, external, index }) => {
+              {designatedLinks.map(({ resource, href, linkTitle, external, index }) => {
                 return (
                   <Link key={`${resource.id}-${href}`} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className="reference-card animate-on-scroll">
                     <span className={`badge badge--${colorFor(resource)}`}>{resource.category}</span>
-                    <strong>{resource.title}{index > 0 ? ` — Link ${index + 1}` : ''}</strong>
+                    <strong>{linkTitle || resource.title}{!linkTitle && index > 0 ? ` — Link ${index + 1}` : ''}</strong>
                     {external ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
                   </Link>
                 );
@@ -241,8 +241,9 @@ export default function ResourcesPage() {
           ) : (
             <div className="grid grid--3">
               {filtered.map((resource, i) => (
-                <div
+                <Link
                   key={resource.id}
+                  href={`/resources/${resource.slug || resource.id}`}
                   className={`card card--service card--${colorFor(resource)} animate-on-scroll animate-on-scroll--delay-${(i % 3) + 1}`}
                 >
                   <span className={`badge badge--${colorFor(resource)}`} style={{ marginBottom: 'var(--space-3)' }}>
@@ -250,10 +251,10 @@ export default function ResourcesPage() {
                   </span>
                   <h3 className="card__title">{resource.title}</h3>
                   <p className="card__description">{resource.description}</p>
-                  <Link href={resource.link_url || `/resources/${resource.slug || resource.id}`} target={resource.link_url ? '_blank' : undefined} rel={resource.link_url ? 'noreferrer' : undefined} className="card__link">
+                  <span className="card__link">
                     Read more <ArrowRight size={14} />
-                  </Link>
-                </div>
+                  </span>
+                </Link>
               ))}
             </div>
           )}

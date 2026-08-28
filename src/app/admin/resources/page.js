@@ -57,7 +57,8 @@ export default function AdminResourcesPage() {
   const [resources, setResources] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true, reference_links: ['', '', '', '', ''], featured_link: false });
+  const emptyLinks = () => Array.from({ length: 5 }, () => ({ title: '', url: '' }));
+  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true, reference_links: emptyLinks(), featured_link: false });
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -127,7 +128,7 @@ export default function AdminResourcesPage() {
   };
 
   const resetForm = () => {
-    setForm({ title: '', category: '', description: '', content: '', published: true, reference_links: ['', '', '', '', ''], featured_link: false });
+    setForm({ title: '', category: '', description: '', content: '', published: true, reference_links: emptyLinks(), featured_link: false });
     setEditingId(null);
     setShowForm(false);
   };
@@ -139,7 +140,7 @@ export default function AdminResourcesPage() {
       description: resource.description || '',
       content: resource.content || '',
       published: resource.published,
-      reference_links: [...(resource.reference_links?.length ? resource.reference_links : resource.link_url ? [resource.link_url] : []), '', '', '', '', ''].slice(0, 5),
+      reference_links: [...(resource.reference_links?.length ? resource.reference_links.map((link, index) => typeof link === 'string' ? { title: `Helpful Link ${index + 1}`, url: link } : link) : resource.link_url ? [{ title: 'Helpful Link', url: resource.link_url }] : []), ...emptyLinks()].slice(0, 5),
       featured_link: !!resource.featured_link
     });
     setEditingId(resource.id);
@@ -237,20 +238,32 @@ export default function AdminResourcesPage() {
             <div>
               <label className="form-label">Destination Links (up to 5)</label>
               <div className="resource-link-fields">
-                {form.reference_links.map((url, index) => (
-                  <input
-                    key={index}
-                    type="url"
-                    className="form-input"
-                    value={url}
-                    onChange={(e) => {
-                      const links = [...form.reference_links];
-                      links[index] = e.target.value;
-                      setForm({ ...form, reference_links: links });
-                    }}
-                    placeholder={`Destination link ${index + 1}`}
-                    aria-label={`Destination link ${index + 1}`}
-                  />
+                {form.reference_links.map((link, index) => (
+                  <div className="resource-link-field" key={index}>
+                    <span className="resource-link-field__number">Link {index + 1}</span>
+                    <input
+                      type="text"
+                      className="form-input"
+                      value={link.title}
+                      onChange={(e) => {
+                        const links = form.reference_links.map((item, itemIndex) => itemIndex === index ? { ...item, title: e.target.value } : item);
+                        setForm({ ...form, reference_links: links });
+                      }}
+                      placeholder="Custom link title"
+                      aria-label={`Link ${index + 1} title`}
+                    />
+                    <input
+                      type="url"
+                      className="form-input"
+                      value={link.url}
+                      onChange={(e) => {
+                        const links = form.reference_links.map((item, itemIndex) => itemIndex === index ? { ...item, url: e.target.value } : item);
+                        setForm({ ...form, reference_links: links });
+                      }}
+                      placeholder="https://example.com/resource"
+                      aria-label={`Link ${index + 1} destination`}
+                    />
+                  </div>
                 ))}
               </div>
             </div>

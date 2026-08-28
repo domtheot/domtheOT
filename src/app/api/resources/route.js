@@ -5,6 +5,14 @@ function isConfigured() {
   return process.env.NEXT_PUBLIC_SUPABASE_URL && (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 }
 
+function normalizeReferenceLinks(links) {
+  if (!Array.isArray(links)) return [];
+  return links.map((link, index) => {
+    if (typeof link === 'string') return { title: `Helpful Link ${index + 1}`, url: link.trim() };
+    return { title: String(link?.title || '').trim(), url: String(link?.url || '').trim() };
+  }).filter((link) => link.url).slice(0, 5);
+}
+
 export async function GET(request) {
   try {
     if (!isConfigured()) {
@@ -77,7 +85,7 @@ export async function POST(request) {
           content: content || '',
           published: !!published,
           link_url: link_url || null,
-          reference_links: Array.isArray(reference_links) ? reference_links.filter(Boolean).slice(0, 5) : [],
+          reference_links: normalizeReferenceLinks(reference_links),
           featured_link: !!featured_link,
         },
       ])
