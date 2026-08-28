@@ -54,6 +54,8 @@ CREATE TABLE IF NOT EXISTS resources (
     description TEXT NOT NULL,
     content TEXT NOT NULL,
     image_url TEXT,
+    link_url TEXT,
+    featured_link BOOLEAN DEFAULT FALSE NOT NULL,
     published BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
@@ -61,6 +63,7 @@ CREATE TABLE IF NOT EXISTS resources (
 
 CREATE INDEX IF NOT EXISTS idx_resources_slug ON resources(slug);
 CREATE INDEX IF NOT EXISTS idx_resources_category ON resources(category);
+CREATE INDEX IF NOT EXISTS idx_resources_featured_link ON resources(featured_link) WHERE featured_link = TRUE;
 
 -- ==========================================
 -- 4. TESTIMONIALS TABLE (Client Stories)
@@ -149,7 +152,9 @@ CREATE POLICY "Allow public read of published resources"
 -- Admin has full access
 CREATE POLICY "Allow full admin access to resources" 
     ON resources FOR ALL 
-    USING (auth.role() = 'service_role' OR auth.uid() IN (SELECT auth.uid() FROM auth.users));
+    TO authenticated
+    USING (TRUE)
+    WITH CHECK (TRUE);
 
 -- 2. Testimonials Policies
 -- Public can read published testimonials
@@ -160,7 +165,9 @@ CREATE POLICY "Allow public read of published testimonials"
 -- Admin has full access
 CREATE POLICY "Allow full admin access to testimonials" 
     ON testimonials FOR ALL 
-    USING (auth.role() = 'service_role' OR auth.uid() IN (SELECT auth.uid() FROM auth.users));
+    TO authenticated
+    USING (TRUE)
+    WITH CHECK (TRUE);
 
 -- 3. FAQs Policies
 -- Public can read published faqs
@@ -171,7 +178,9 @@ CREATE POLICY "Allow public read of published faqs"
 -- Admin has full access
 CREATE POLICY "Allow full admin access to faqs" 
     ON faqs FOR ALL 
-    USING (auth.role() = 'service_role' OR auth.uid() IN (SELECT auth.uid() FROM auth.users));
+    TO authenticated
+    USING (TRUE)
+    WITH CHECK (TRUE);
 
 -- 4. Inquiries Policies
 -- Public can create inquiries (insert-only)
@@ -182,10 +191,14 @@ CREATE POLICY "Allow public insert of inquiries"
 -- Admin can read/write inquiries
 CREATE POLICY "Allow full admin access to inquiries" 
     ON inquiries FOR ALL 
-    USING (auth.role() = 'service_role' OR auth.uid() IN (SELECT auth.uid() FROM auth.users));
+    TO authenticated
+    USING (TRUE)
+    WITH CHECK (TRUE);
 
 -- 5. Inquiry Notes Policies
 -- Admin can read/write notes (private)
 CREATE POLICY "Allow full admin access to inquiry notes" 
     ON inquiry_notes FOR ALL 
-    USING (auth.role() = 'service_role' OR auth.uid() IN (SELECT auth.uid() FROM auth.users));
+    TO authenticated
+    USING (TRUE)
+    WITH CHECK (TRUE);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, Link2 } from 'lucide-react';
 
 const demoResources = [
   {
@@ -11,7 +11,7 @@ const demoResources = [
     description: 'A comprehensive guide for parents to identify and support sensory processing needs at home.',
     content: 'Sensory processing refers to the way the nervous system receives messages from the senses and turns them into responses. For children with sensory processing differences, processing sensory information (like sights, sounds, textures, and balance) can be challenging. In this guide, we discuss practical home-based strategies such as creating a sensory-friendly space, utilizing heavy work activities, and establishing predictable sensory routines that support daily functioning.',
     published: true,
-    createdAt: '2026-08-01'
+    createdAt: '2026-08-01', link_url: '', featured_link: true
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const demoResources = [
     description: 'Empowering steps to help you prepare emotionally, physically, and practically for delivery day.',
     content: 'Preparing for birth involves understanding your options, building a trusted support team, and preparing your body and mind. As your doula, I recommend starting with a flexible birth preferences plan, practicing relaxation breathing techniques, and involving your partner in comfort measures (like counterpressure and massage). Remember that birth is a physiological process that unfolds best when you feel safe, supported, and respected.',
     published: true,
-    createdAt: '2026-07-28'
+    createdAt: '2026-07-28', link_url: '', featured_link: true
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const demoResources = [
     description: 'Practical scheduling and occupational tips for adjustment and recovery during the fourth trimester.',
     content: 'The postpartum period, often called the fourth trimester, is a time of immense physical, emotional, and social transition. To establish healthy routines, prioritize rest, nutrition, and boundaries. From an occupational therapy perspective, we look at pacing daily activities, simplifying household tasks, and structuring routines around baby care and self-care to ensure you recover sustainably and bond deeply with your newborn.',
     published: true,
-    createdAt: '2026-07-20'
+    createdAt: '2026-07-20', link_url: '', featured_link: true
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ const demoResources = [
     description: 'A checklist of hand and finger coordination milestones from birth through preschool age.',
     content: 'Fine motor skills involve the coordination of small muscles in the hands and fingers. Milestones span from early reflex grasping in newborns to building blocks, scribbling, cutting with safety scissors, and buttoning shirts as toddlers grow. We cover what developmental signs to look for and interactive play ideas — like playdough, bead-stringing, and pegboards — to naturally encourage fine motor strength and finger isolation.',
     published: false,
-    createdAt: '2026-08-10'
+    createdAt: '2026-08-10', link_url: '', featured_link: false
   },
   {
     id: 5,
@@ -47,7 +47,7 @@ const demoResources = [
     description: 'Demystifying the role of a birth doula, doula support boundaries, and benefits during labor.',
     content: 'A birth doula is a trained professional who provides continuous physical, emotional, and informational support to a mother before, during, and shortly after childbirth. Unlike medical staff, a doula focuses entirely on your comfort, advocacy, and reassurance. Research consistently shows that doula support reduces medical intervention rates, shortens labor times, and significantly improves the mother’s overall birth satisfaction.',
     published: true,
-    createdAt: '2026-07-15'
+    createdAt: '2026-07-15', link_url: '', featured_link: true
   }
 ];
 
@@ -57,20 +57,26 @@ export default function AdminResourcesPage() {
   const [resources, setResources] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true });
+  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true, link_url: '', featured_link: false });
+  const [message, setMessage] = useState('');
 
-  // Load resources from Local Storage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('dom_resources');
-    if (saved) {
+    async function loadResources() {
       try {
-        setResources(JSON.parse(saved));
-      } catch (e) {
-        setResources(demoResources);
+        const response = await fetch('/api/resources');
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error);
+        setResources(result.data || []);
+        localStorage.setItem('dom_resources', JSON.stringify(result.data || []));
+        return;
+      } catch (error) {
+        console.warn('Using locally saved resources:', error);
       }
-    } else {
-      setResources(demoResources);
+      const saved = localStorage.getItem('dom_resources');
+      try { setResources(saved ? JSON.parse(saved) : demoResources); }
+      catch { setResources(demoResources); }
     }
+    loadResources();
   }, []);
 
   // Save to Local Storage whenever resources change
@@ -79,29 +85,49 @@ export default function AdminResourcesPage() {
     localStorage.setItem('dom_resources', JSON.stringify(newResources));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.title || !form.category) return;
+    if (form.featured_link && resources.filter((r) => r.featured_link && r.id !== editingId).length >= 5) {
+      setMessage('You can designate up to five quick-reference links. Remove one before adding another.');
+      return;
+    }
+    let optimistic;
     if (editingId) {
-      const updated = resources.map((r) => 
+      optimistic = resources.map((r) =>
         r.id === editingId ? { ...r, ...form } : r
       );
-      saveResources(updated);
     } else {
-      const added = [
+      optimistic = [
         ...resources,
         {
           ...form,
-          id: Date.now(),
-          createdAt: new Date().toISOString().split('T')[0]
+          id: `local-${form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${resources.length + 1}`,
+          createdAt: 'Local draft'
         }
       ];
-      saveResources(added);
+    }
+    try {
+      const response = await fetch(editingId ? `/api/resources/${editingId}` : '/api/resources', {
+        method: editingId ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+      const next = editingId
+        ? resources.map((r) => r.id === editingId ? result.data : r)
+        : [...resources, result.data];
+      saveResources(next);
+      setMessage('Resource saved and connected to the public Resources page.');
+    } catch (error) {
+      saveResources(optimistic);
+      setMessage(`Saved in this browser. Database sync unavailable: ${error.message}`);
     }
     resetForm();
   };
 
   const resetForm = () => {
-    setForm({ title: '', category: '', description: '', content: '', published: true });
+    setForm({ title: '', category: '', description: '', content: '', published: true, link_url: '', featured_link: false });
     setEditingId(null);
     setShowForm(false);
   };
@@ -112,24 +138,29 @@ export default function AdminResourcesPage() {
       category: resource.category,
       description: resource.description || '',
       content: resource.content || '',
-      published: resource.published
+      published: resource.published,
+      link_url: resource.link_url || '',
+      featured_link: !!resource.featured_link
     });
     setEditingId(resource.id);
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this resource?')) {
       const filtered = resources.filter((r) => r.id !== id);
       saveResources(filtered);
+      try { await fetch(`/api/resources/${id}`, { method: 'DELETE' }); } catch {}
     }
   };
 
-  const togglePublish = (id) => {
+  const togglePublish = async (id) => {
     const updated = resources.map((r) => 
       r.id === id ? { ...r, published: !r.published } : r
     );
     saveResources(updated);
+    const resource = updated.find((r) => r.id === id);
+    try { await fetch(`/api/resources/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ published: resource.published }) }); } catch {}
   };
 
   return (
@@ -145,6 +176,8 @@ export default function AdminResourcesPage() {
           <Plus size={14} /> Add New Article
         </button>
       </div>
+
+      {message && <div className="admin-notice" role="status">{message}</div>}
 
       {/* Editor Form */}
       {showForm && (
@@ -200,6 +233,17 @@ export default function AdminResourcesPage() {
             />
           </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 'var(--space-4)', alignItems: 'end', marginBottom: 'var(--space-5)' }}>
+            <div className="form-group">
+              <label className="form-label">Destination Link (optional)</label>
+              <input type="url" className="form-input" value={form.link_url} onChange={(e) => setForm({ ...form, link_url: e.target.value })} placeholder="https://example.com/helpful-guide" />
+            </div>
+            <label className="resource-feature-toggle">
+              <input type="checkbox" checked={form.featured_link} onChange={(e) => setForm({ ...form, featured_link: e.target.checked })} />
+              <span>Designate as quick reference</span>
+            </label>
+          </div>
+
           <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
             <button className="btn btn--primary btn--sm" onClick={handleSave}>
               {editingId ? 'Save Changes' : 'Publish Article'}
@@ -231,8 +275,9 @@ export default function AdminResourcesPage() {
                     <span className="status-badge__dot" />
                     {r.published ? 'Published' : 'Draft'}
                   </span>
+                  {r.featured_link && <span className="reference-marker"><Link2 size={12} /> Reference</span>}
                 </td>
-                <td style={{ fontSize: 'var(--text-sm)', color: 'var(--color-warm-gray)' }}>{r.createdAt}</td>
+                <td style={{ fontSize: 'var(--text-sm)', color: 'var(--color-warm-gray)' }}>{r.createdAt || r.created_at?.slice(0, 10)}</td>
                 <td>
                   <div style={{ display: 'flex', gap: 'var(--space-2)', justifyContent: 'flex-end' }}>
                     <button 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Lock, Mail } from 'lucide-react';
+import { supabase } from '@/lib/supabase/client';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -17,12 +18,12 @@ export default function AdminLoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Demo login — replace with Supabase auth in production
-    if (email === 'dom@domtheot.com' && password === 'admin123') {
-      localStorage.setItem('dom-admin-auth', 'true');
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    if (!signInError) {
       router.push('/admin');
+      router.refresh();
     } else {
-      setError('Invalid email or password. Please try again.');
+      setError(signInError.message || 'Invalid email or password. Please try again.');
     }
 
     setIsLoading(false);
@@ -124,15 +125,6 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <p
-          style={{
-            marginTop: 'var(--space-6)',
-            fontSize: 'var(--text-xs)',
-            color: 'var(--color-warm-gray-light)',
-          }}
-        >
-          Demo: dom@domtheot.com / admin123
-        </p>
       </div>
     </div>
   );

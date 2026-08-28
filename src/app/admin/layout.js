@@ -14,6 +14,7 @@ import {
   Menu,
   X,
 } from 'lucide-react';
+import { supabase } from '@/lib/supabase/client';
 
 const sidebarLinks = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -26,29 +27,25 @@ const sidebarLinks = [
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAuth, setIsAuth] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Skip auth for login page
   const isLoginPage = pathname === '/admin/login';
+  const isAuth = isLoginPage || authenticated;
 
   useEffect(() => {
-    if (isLoginPage) {
-      setIsAuth(true);
-      return;
-    }
-    // Demo auth check — replace with Supabase
-    const auth = localStorage.getItem('dom-admin-auth');
-    if (auth === 'true') {
-      setIsAuth(true);
-    } else {
-      router.push('/admin/login');
-    }
+    if (isLoginPage) return;
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setAuthenticated(true);
+      else router.push('/admin/login');
+    });
   }, [isLoginPage, router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('dom-admin-auth');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     router.push('/admin/login');
+    router.refresh();
   };
 
   if (!isAuth) return null;

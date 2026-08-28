@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, X, ArrowRight, BookOpen } from 'lucide-react';
+import { Search, X, ArrowRight, BookOpen, ExternalLink } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const categories = [
@@ -17,14 +17,14 @@ const categories = [
 ];
 
 // Placeholder resources (will be fetched from Supabase in production)
-const resourcesData = [
+const fallbackResources = [
   {
     id: 1,
     title: 'Understanding Sensory Processing in Children',
     category: 'Occupational Therapy',
     description:
       'Learn how sensory processing affects your child\'s behavior, attention, and daily activities — and what you can do to help.',
-    color: 'green',
+    color: 'green', published: true, featured_link: true,
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ const resourcesData = [
     category: 'Birth',
     description:
       'A comprehensive guide to creating birth preferences, understanding your options, and feeling confident heading into labor.',
-    color: 'amber',
+    color: 'amber', published: true, featured_link: true,
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const resourcesData = [
     category: 'Postpartum',
     description:
       'Practical strategies for establishing sustainable daily routines during the early postpartum period.',
-    color: 'purple',
+    color: 'purple', published: true, featured_link: true,
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ const resourcesData = [
     category: 'Infant Development',
     description:
       'What to expect at each stage of fine motor development and activities you can do at home to support growth.',
-    color: 'magenta',
+    color: 'magenta', published: true, featured_link: false,
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ const resourcesData = [
     category: 'Pregnancy',
     description:
       'Everything you need to know about doula support — what to expect, how it helps, and who it\'s for.',
-    color: 'sage',
+    color: 'sage', published: true, featured_link: true,
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ const resourcesData = [
     category: 'Occupational Therapy',
     description:
       'Understanding how gross motor skills develop and how occupational therapy can support children who need extra help.',
-    color: 'green',
+    color: 'green', published: true, featured_link: false,
   },
   {
     id: 7,
@@ -72,7 +72,7 @@ const resourcesData = [
     category: 'Maternal Wellness',
     description:
       'Why prioritizing your own well-being isn\'t selfish — it\'s essential. Practical self-care strategies for exhausted parents.',
-    color: 'sage',
+    color: 'sage', published: true, featured_link: false,
   },
   {
     id: 8,
@@ -80,7 +80,7 @@ const resourcesData = [
     category: 'Parenting',
     description:
       'Signs that your child may benefit from early intervention services, and how to get started in Florida.',
-    color: 'purple',
+    color: 'purple', published: true, featured_link: false,
   },
 ];
 
@@ -88,8 +88,37 @@ export default function ResourcesPage() {
   const scrollRef = useScrollAnimation();
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [resources, setResources] = useState([]);
 
-  const filtered = resourcesData.filter((r) => {
+  useEffect(() => {
+    async function loadResources() {
+      try {
+        const response = await fetch('/api/resources?published=true');
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error);
+        setResources(result.data || []);
+        return;
+      } catch (error) {
+        console.warn('Using locally available resources:', error);
+      }
+      try {
+        const saved = JSON.parse(localStorage.getItem('dom_resources') || '[]');
+        const published = saved.filter((resource) => resource.published);
+        setResources(published.length ? published : fallbackResources);
+      } catch {
+        setResources(fallbackResources);
+      }
+    }
+    loadResources();
+  }, []);
+
+  const colorFor = (resource) => resource.color || ({
+    'Occupational Therapy': 'green', Birth: 'amber', Postpartum: 'purple',
+    'Infant Development': 'magenta', Pregnancy: 'sage', Parenting: 'purple',
+    'Maternal Wellness': 'sage',
+  }[resource.category] || 'sage');
+
+  const filtered = resources.filter((r) => {
     const matchesCategory =
       activeCategory === 'All' || r.category === activeCategory;
     const matchesSearch =
@@ -98,6 +127,7 @@ export default function ResourcesPage() {
       r.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+  const designatedLinks = resources.filter((resource) => resource.featured_link).slice(0, 5);
 
   return (
     <div ref={scrollRef}>
@@ -114,6 +144,31 @@ export default function ResourcesPage() {
           </p>
         </div>
       </section>
+
+      {designatedLinks.length > 0 && (
+        <section className="section section--cream" style={{ paddingBottom: 0 }}>
+          <div className="container">
+            <div className="reference-heading animate-on-scroll">
+              <p className="section-label">Your Quick References</p>
+              <h2>Helpful links, all in one place</h2>
+              <p>Keep these designated resources handy whenever you need to come back to them.</p>
+            </div>
+            <div className="reference-grid">
+              {designatedLinks.map((resource) => {
+                const href = resource.link_url || `/resources/${resource.slug || resource.id}`;
+                const external = !!resource.link_url;
+                return (
+                  <Link key={resource.id} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className="reference-card animate-on-scroll">
+                    <span className={`badge badge--${colorFor(resource)}`}>{resource.category}</span>
+                    <strong>{resource.title}</strong>
+                    {external ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Search & Filter */}
       <section className="section section--cream" style={{ paddingBottom: 0 }}>
@@ -181,16 +236,16 @@ export default function ResourcesPage() {
               {filtered.map((resource, i) => (
                 <div
                   key={resource.id}
-                  className={`card card--service card--${resource.color} animate-on-scroll animate-on-scroll--delay-${(i % 3) + 1}`}
+                  className={`card card--service card--${colorFor(resource)} animate-on-scroll animate-on-scroll--delay-${(i % 3) + 1}`}
                 >
-                  <span className={`badge badge--${resource.color}`} style={{ marginBottom: 'var(--space-3)' }}>
+                  <span className={`badge badge--${colorFor(resource)}`} style={{ marginBottom: 'var(--space-3)' }}>
                     {resource.category}
                   </span>
                   <h3 className="card__title">{resource.title}</h3>
                   <p className="card__description">{resource.description}</p>
-                  <span className="card__link">
+                  <Link href={resource.link_url || `/resources/${resource.slug || resource.id}`} target={resource.link_url ? '_blank' : undefined} rel={resource.link_url ? 'noreferrer' : undefined} className="card__link">
                     Read more <ArrowRight size={14} />
-                  </span>
+                  </Link>
                 </div>
               ))}
             </div>
