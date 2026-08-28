@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, X, ArrowRight, BookOpen, ExternalLink } from 'lucide-react';
+import { Search, X, ArrowRight, BookOpen } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const categories = [
@@ -127,16 +127,7 @@ export default function ResourcesPage() {
       r.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-  const designatedLinks = resources
-    .filter((resource) => resource.featured_link)
-    .flatMap((resource) => {
-      const links = resource.reference_links?.map((link, index) => typeof link === 'string' ? { title: `Helpful Link ${index + 1}`, url: link } : link).filter((link) => link?.url) || [];
-      if (!links.length) {
-        return [{ resource, href: resource.link_url || `/resources/${resource.slug || resource.id}`, external: !!resource.link_url }];
-      }
-      return links.map((link, index) => ({ resource, href: link.url, linkTitle: link.title, external: true, index }));
-    })
-    .slice(0, 5);
+  const designatedResources = resources.filter((resource) => resource.featured_link).slice(0, 5);
 
   return (
     <div ref={scrollRef}>
@@ -154,7 +145,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {designatedLinks.length > 0 && (
+      {designatedResources.length > 0 && (
         <section className="section section--cream" style={{ paddingBottom: 0 }}>
           <div className="container">
             <div className="reference-heading animate-on-scroll">
@@ -163,15 +154,13 @@ export default function ResourcesPage() {
               <p>Keep these designated resources handy whenever you need to come back to them.</p>
             </div>
             <div className="reference-grid">
-              {designatedLinks.map(({ resource, href, linkTitle, external, index }) => {
-                return (
-                  <Link key={`${resource.id}-${href}`} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className="reference-card animate-on-scroll">
-                    <span className={`badge badge--${colorFor(resource)}`}>{resource.category}</span>
-                    <strong>{linkTitle || resource.title}{!linkTitle && index > 0 ? ` — Link ${index + 1}` : ''}</strong>
-                    {external ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
-                  </Link>
-                );
-              })}
+              {designatedResources.map((resource) => (
+                <Link key={resource.id} href={`/resources/${resource.slug || resource.id}`} className="reference-card animate-on-scroll">
+                  <span className={`badge badge--${colorFor(resource)}`}>{resource.category}</span>
+                  <strong>{resource.title}</strong>
+                  <ArrowRight size={18} />
+                </Link>
+              ))}
             </div>
           </div>
         </section>
