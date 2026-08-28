@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS resources (
     content TEXT NOT NULL,
     image_url TEXT,
     link_url TEXT,
+    reference_links JSONB DEFAULT '[]'::jsonb NOT NULL,
     featured_link BOOLEAN DEFAULT FALSE NOT NULL,
     published BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,

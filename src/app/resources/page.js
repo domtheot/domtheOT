@@ -127,7 +127,16 @@ export default function ResourcesPage() {
       r.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-  const designatedLinks = resources.filter((resource) => resource.featured_link).slice(0, 5);
+  const designatedLinks = resources
+    .filter((resource) => resource.featured_link)
+    .flatMap((resource) => {
+      const links = resource.reference_links?.filter(Boolean) || [];
+      if (!links.length) {
+        return [{ resource, href: resource.link_url || `/resources/${resource.slug || resource.id}`, external: !!resource.link_url }];
+      }
+      return links.map((href, index) => ({ resource, href, external: true, index }));
+    })
+    .slice(0, 5);
 
   return (
     <div ref={scrollRef}>
@@ -154,13 +163,11 @@ export default function ResourcesPage() {
               <p>Keep these designated resources handy whenever you need to come back to them.</p>
             </div>
             <div className="reference-grid">
-              {designatedLinks.map((resource) => {
-                const href = resource.link_url || `/resources/${resource.slug || resource.id}`;
-                const external = !!resource.link_url;
+              {designatedLinks.map(({ resource, href, external, index }) => {
                 return (
-                  <Link key={resource.id} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className="reference-card animate-on-scroll">
+                  <Link key={`${resource.id}-${href}`} href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className="reference-card animate-on-scroll">
                     <span className={`badge badge--${colorFor(resource)}`}>{resource.category}</span>
-                    <strong>{resource.title}</strong>
+                    <strong>{resource.title}{index > 0 ? ` — Link ${index + 1}` : ''}</strong>
                     {external ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
                   </Link>
                 );

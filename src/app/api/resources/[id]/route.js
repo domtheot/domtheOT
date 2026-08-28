@@ -16,8 +16,12 @@ export async function PATCH(request, { params }) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     const body = await request.json();
-    const allowed = ['title', 'category', 'description', 'content', 'published', 'link_url', 'featured_link'];
+    const allowed = ['title', 'category', 'description', 'content', 'published', 'link_url', 'reference_links', 'featured_link'];
     const updates = Object.fromEntries(allowed.filter((key) => key in body).map((key) => [key, body[key]]));
+
+    if (Array.isArray(updates.reference_links)) {
+      updates.reference_links = updates.reference_links.filter(Boolean).slice(0, 5);
+    }
 
     if (updates.title) {
       updates.slug = updates.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');

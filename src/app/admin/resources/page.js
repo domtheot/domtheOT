@@ -57,7 +57,7 @@ export default function AdminResourcesPage() {
   const [resources, setResources] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true, link_url: '', featured_link: false });
+  const [form, setForm] = useState({ title: '', category: '', description: '', content: '', published: true, reference_links: ['', '', '', '', ''], featured_link: false });
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function AdminResourcesPage() {
   };
 
   const resetForm = () => {
-    setForm({ title: '', category: '', description: '', content: '', published: true, link_url: '', featured_link: false });
+    setForm({ title: '', category: '', description: '', content: '', published: true, reference_links: ['', '', '', '', ''], featured_link: false });
     setEditingId(null);
     setShowForm(false);
   };
@@ -139,7 +139,7 @@ export default function AdminResourcesPage() {
       description: resource.description || '',
       content: resource.content || '',
       published: resource.published,
-      link_url: resource.link_url || '',
+      reference_links: [...(resource.reference_links?.length ? resource.reference_links : resource.link_url ? [resource.link_url] : []), '', '', '', '', ''].slice(0, 5),
       featured_link: !!resource.featured_link
     });
     setEditingId(resource.id);
@@ -233,10 +233,26 @@ export default function AdminResourcesPage() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 'var(--space-4)', alignItems: 'end', marginBottom: 'var(--space-5)' }}>
-            <div className="form-group">
-              <label className="form-label">Destination Link (optional)</label>
-              <input type="url" className="form-input" value={form.link_url} onChange={(e) => setForm({ ...form, link_url: e.target.value })} placeholder="https://example.com/helpful-guide" />
+          <div className="resource-link-editor">
+            <div>
+              <label className="form-label">Destination Links (up to 5)</label>
+              <div className="resource-link-fields">
+                {form.reference_links.map((url, index) => (
+                  <input
+                    key={index}
+                    type="url"
+                    className="form-input"
+                    value={url}
+                    onChange={(e) => {
+                      const links = [...form.reference_links];
+                      links[index] = e.target.value;
+                      setForm({ ...form, reference_links: links });
+                    }}
+                    placeholder={`Destination link ${index + 1}`}
+                    aria-label={`Destination link ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
             <label className="resource-feature-toggle">
               <input type="checkbox" checked={form.featured_link} onChange={(e) => setForm({ ...form, featured_link: e.target.checked })} />

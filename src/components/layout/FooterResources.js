@@ -13,11 +13,21 @@ export default function FooterResources() {
         const response = await fetch('/api/resources?published=true&featured=true&limit=5');
         const result = await response.json();
         if (!response.ok) throw new Error(result.error);
-        setResources(result.data || []);
+        const links = (result.data || []).flatMap((resource) => {
+          const destinations = resource.reference_links?.filter(Boolean) || [];
+          if (!destinations.length) return [{ ...resource, destination: resource.link_url || `/resources/${resource.slug || resource.id}` }];
+          return destinations.map((destination, index) => ({ ...resource, destination, linkIndex: index }));
+        });
+        setResources(links.slice(0, 5));
       } catch {
         try {
           const localResources = JSON.parse(localStorage.getItem('dom_resources') || '[]');
-          setResources(localResources.filter((item) => item.published && item.featured_link).slice(0, 5));
+          const links = localResources.filter((item) => item.published && item.featured_link).flatMap((resource) => {
+            const destinations = resource.reference_links?.filter(Boolean) || [];
+            if (!destinations.length) return [{ ...resource, destination: resource.link_url || `/resources/${resource.slug || resource.id}` }];
+            return destinations.map((destination, index) => ({ ...resource, destination, linkIndex: index }));
+          });
+          setResources(links.slice(0, 5));
         } catch {
           setResources([]);
         }
@@ -31,16 +41,17 @@ export default function FooterResources() {
     <div>
       <h3 className="footer__heading">Quick Resources</h3>
       {resources.length ? resources.map((resource) => {
-        const external = Boolean(resource.link_url);
+        const href = resource.destination || resource.link_url || `/resources/${resource.slug || resource.id}`;
+        const external = /^https?:\/\//i.test(href);
         return (
           <Link
-            key={resource.id}
-            href={resource.link_url || `/resources/${resource.slug || resource.id}`}
+            key={`${resource.id}-${href}`}
+            href={href}
             target={external ? '_blank' : undefined}
             rel={external ? 'noopener noreferrer' : undefined}
             className="footer__link footer__resource-link"
           >
-            <span>{resource.title}</span>
+            <span>{resource.title}{resource.linkIndex > 0 ? ` — Link ${resource.linkIndex + 1}` : ''}</span>
             <ArrowUpRight size={13} aria-hidden="true" />
           </Link>
         );

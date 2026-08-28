@@ -39,7 +39,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { title, category, description, content, published, link_url, featured_link } = body;
+    const { title, category, description, content, published, link_url, reference_links, featured_link } = body;
 
     if (!title || !category) {
       return NextResponse.json({ success: false, error: 'Title and category are required' }, { status: 400 });
@@ -77,6 +77,7 @@ export async function POST(request) {
           content: content || '',
           published: !!published,
           link_url: link_url || null,
+          reference_links: Array.isArray(reference_links) ? reference_links.filter(Boolean).slice(0, 5) : [],
           featured_link: !!featured_link,
         },
       ])

@@ -1708,6 +1708,25 @@ p {
   white-space: nowrap;
 }
 
+.resource-link-editor {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-4);
+  align-items: end;
+  margin-bottom: var(--space-5);
+}
+
+.resource-link-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.resource-link-fields .form-input:first-child:last-child,
+.resource-link-fields .form-input:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .resource-feature-toggle input { width: 18px; height: 18px; accent-color: var(--color-lime); }
 
 .reference-marker {
@@ -1743,6 +1762,8 @@ p {
 @media (max-width: 600px) {
   .reference-grid { grid-template-columns: 1fr; }
   .reference-card { min-height: 140px; }
+  .resource-link-editor,
+  .resource-link-fields { grid-template-columns: 1fr; }
 }
 
 .status-badge--closed {
