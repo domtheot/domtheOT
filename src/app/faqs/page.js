@@ -217,7 +217,7 @@ export default function FAQsPage() {
                 Contact Dominique <ArrowRight size={16} />
               </Link>
               <a href="tel:+17863906614" className="btn btn--secondary btn--lg">
-                Call (786) 390-6614
+                Text/Call (786) 390-6614
               </a>
             </div>
           </div>

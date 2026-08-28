@@ -255,7 +255,7 @@ export default function DoulaServicesPage() {
                 Request Doula Support <ArrowRight size={16} />
               </Link>
               <a href="tel:+17863906614" className="btn btn--secondary btn--lg">
-                Call (786) 390-6614
+                Text/Call (786) 390-6614
               </a>
             </div>
           </div>
