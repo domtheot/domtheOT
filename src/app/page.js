@@ -64,6 +64,15 @@ const services = [
     color: 'sage',
     href: '/doula-services',
   },
+  {
+    title: 'Breastfeeding & Feeding Support',
+    tag: 'Lactation Care',
+    description:
+      'Certified Breastfeeding Counselor support for education, positioning and latch, feeding cues, milk supply, and infant feeding routines.',
+    icon: Baby,
+    color: 'amber',
+    href: '/pregnancy-postpartum',
+  },
 ];
 
 const differentiators = [
