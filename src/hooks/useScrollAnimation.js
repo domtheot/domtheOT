@@ -17,10 +17,32 @@ export function useScrollAnimation() {
       { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
 
-    const elements = ref.current?.querySelectorAll('.animate-on-scroll');
-    elements?.forEach((el) => observer.observe(el));
+    const observeAnimations = (root) => {
+      if (!root) return;
+      if (root.matches?.('.animate-on-scroll')) observer.observe(root);
+      root.querySelectorAll?.('.animate-on-scroll').forEach((el) => observer.observe(el));
+    };
 
-    return () => observer.disconnect();
+    observeAnimations(ref.current);
+
+    // Resource and CMS content arrives after the initial render. Observe newly
+    // inserted animated elements so they do not remain permanently transparent.
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) observeAnimations(node);
+        });
+      });
+    });
+
+    if (ref.current) {
+      mutationObserver.observe(ref.current, { childList: true, subtree: true });
+    }
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 
   return ref;
