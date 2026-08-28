@@ -54,48 +54,13 @@ export default function InquiryDetailPage({ params }) {
           setInquiry(json.data);
           setNotes(json.data.notes || []);
           setIsLiveDB(true);
-        } else {
-          // Fallback to local storage inquiries lookup
-          loadFromLocalStorage();
-        }
+        } else setInquiry(null);
       } catch (e) {
-        console.error('API get inquiry detail failed, using LocalStorage fallback:', e);
-        loadFromLocalStorage();
+        console.error('API get inquiry detail failed:', e);
+        setInquiry(null);
       } finally {
         setLoading(false);
       }
-    }
-
-    function loadFromLocalStorage() {
-      const savedInqs = localStorage.getItem('dom_inquiries');
-      if (savedInqs) {
-        const list = JSON.parse(savedInqs);
-        // Find matching inquiry by string or numeric ID
-        const match = list.find((item) => String(item.id) === String(id));
-        if (match) {
-          setInquiry(match);
-          
-          // Load local notes for this inquiry
-          const savedNotes = localStorage.getItem(`dom_notes_${id}`);
-          if (savedNotes) {
-            setNotes(JSON.parse(savedNotes));
-          } else {
-            const initialNotes = [
-              {
-                id: 1,
-                inquiry_id: id,
-                content: 'Initial inquiry received via website contact form.',
-                created_at: match.created_at || new Date().toISOString(),
-                type: 'system'
-              }
-            ];
-            setNotes(initialNotes);
-            localStorage.setItem(`dom_notes_${id}`, JSON.stringify(initialNotes));
-          }
-          return;
-        }
-      }
-      setInquiry(null);
     }
 
     fetchInquiryDetails();

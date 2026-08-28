@@ -39,6 +39,7 @@ export default function InquiriesPage() {
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLiveDB, setIsLiveDB] = useState(false);
+  const [loadError, setLoadError] = useState('');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [serviceFilter, setServiceFilter] = useState('all');
@@ -57,39 +58,19 @@ export default function InquiriesPage() {
           setInquiries(json.data);
           setIsLiveDB(true);
         } else {
-          // Fallback to local storage (merged with demoInquiries)
-          const localVal = localStorage.getItem('dom_inquiries');
-          if (localVal) {
-            const parsed = JSON.parse(localVal);
-            // Deduplicate items
-            const merged = [...parsed];
-            demoInquiries.forEach((item) => {
-              if (!merged.some((m) => m.id === item.id || m.email === item.email)) {
-                merged.push(item);
-              }
-            });
-            setInquiries(merged);
-          } else {
-            setInquiries(demoInquiries);
-            localStorage.setItem('dom_inquiries', JSON.stringify(demoInquiries));
-          }
+          setInquiries([]);
+          setLoadError(json.error || 'Unable to load inquiries.');
         }
       } catch (e) {
         console.error('Error fetching inquiries:', e);
-        const localVal = localStorage.getItem('dom_inquiries');
-        setInquiries(localVal ? JSON.parse(localVal) : demoInquiries);
+        setInquiries([]);
+        setLoadError('Unable to connect to the inquiry database.');
       } finally {
         setLoading(false);
       }
     }
     loadInquiries();
   }, []);
-
-  // Sync state modifications back to local storage
-  const syncLocalInquiries = (updatedList) => {
-    setInquiries(updatedList);
-    localStorage.setItem('dom_inquiries', JSON.stringify(updatedList));
-  };
 
   const getNormalName = (inq) => {
     if (inq.first_name || inq.last_name) {
@@ -188,6 +169,8 @@ export default function InquiriesPage() {
           </button>
         </div>
       </div>
+
+      {loadError && <div className="admin-notice" role="alert">{loadError}</div>}
 
       {/* Search & Filters */}
       <div style={{ marginBottom: 'var(--space-6)' }}>

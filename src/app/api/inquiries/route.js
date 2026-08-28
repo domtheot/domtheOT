@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET(request) {
   try {
@@ -8,16 +8,11 @@ export async function GET(request) {
     const status = searchParams.get('status') || 'all';
     const service = searchParams.get('service') || 'all';
 
-    // Verify Supabase config
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      return NextResponse.json({
-        success: false,
-        error: 'Supabase admin client not configured. Showing local development data.',
-        isDemo: true,
-      }, { status: 200 });
-    }
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
-    let query = supabaseAdmin
+    let query = supabase
       .from('inquiries')
       .select('*')
       .order('created_at', { ascending: false });

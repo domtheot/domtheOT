@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
-import { sendClientConfirmationEmail, sendAdminNotificationEmail } from '@/lib/email';
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request) {
   try {
@@ -50,40 +49,20 @@ export async function POST(request) {
       status: 'new',
     };
 
-    // Insert to database if configured
-    let dbSuccess = false;
-    let dbError = null;
-    let newInquiryId = null;
-
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      const { data, error } = await supabaseAdmin
-        .from('inquiries')
-        .insert([inquiryData])
-        .select('id')
-        .single();
-
-      if (error) {
-        dbError = error.message;
-        console.error('Database insertion failed:', error);
-      } else {
-        dbSuccess = true;
-        newInquiryId = data.id;
-      }
-    } else {
-      console.warn('Supabase env variables missing. Skipping database save.');
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)) {
+      return NextResponse.json({ success: false, error: 'Inquiry database is unavailable' }, { status: 503 });
     }
 
-    // Send email notifications
-    const clientData = { firstName, lastName, email, phone, service, message, source };
-    await sendClientConfirmationEmail(clientData);
-    await sendAdminNotificationEmail(clientData);
+    // Anonymous visitors may insert inquiries through the table's insert-only
+    // RLS policy. No email or service-role credential is required.
+    const supabase = await createClient();
+    const { error } = await supabase.from('inquiries').insert([inquiryData]);
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
       message: 'Inquiry received successfully',
-      inquiryId: newInquiryId,
-      dbSaved: dbSuccess,
-      dbError,
+      dbSaved: true,
     }, { status: 200 });
 
   } catch (error) {

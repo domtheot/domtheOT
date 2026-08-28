@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const body = await request.json();
@@ -12,11 +12,11 @@ export async function POST(request, { params }) {
       return NextResponse.json({ success: false, error: 'Content is required' }, { status: 400 });
     }
 
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      return NextResponse.json({ success: false, error: 'Supabase admin not configured' }, { status: 400 });
-    }
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('inquiry_notes')
       .insert([
         {
