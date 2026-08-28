@@ -17,7 +17,6 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 const credentials = [
   { icon: GraduationCap, text: 'Board-Certified Occupational Therapist' },
   { icon: Award, text: 'Certified Birth & Postpartum Doula' },
-  { icon: Shield, text: 'Autism Spectrum Disorder Clinical Specialist' },
   { icon: Baby, text: 'Certified Breastfeeding Counselor' },
   { icon: Heart, text: 'Certified Aroma Therapist' },
 ];
@@ -217,7 +216,6 @@ export default function AboutContent() {
                     'Trauma-Informed Care',
                     'Zones of Regulation',
                     'Handwriting Without Tears',
-                    'ASD Clinical Specialist',
                   ].map((approach) => (
                     <span key={approach} className="badge badge--amber">
                       {approach}

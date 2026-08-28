@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   Activity,
   Bath,
-  Puzzle,
   Wind,
   ArrowRight,
   CheckCircle,
@@ -90,12 +89,6 @@ const approaches = [
     icon: BookOpen,
     benefits: 'Provides a structured, multisensory approach to handwriting readiness, letter formation, pencil control, visual-motor skills, and fine motor coordination.',
     application: 'I use developmentally appropriate activities, manipulatives, and structured instruction to build pre-writing and handwriting skills while addressing grasp, fine motor control, and visual-motor integration.',
-  },
-  {
-    name: 'ASD Clinical Specialist',
-    icon: Puzzle,
-    benefits: 'Provides specialized knowledge for supporting autistic children with sensory processing, communication, social participation, emotional regulation, motor development, and daily living skills.',
-    application: 'I use an individualized, neurodiversity-affirming approach that considers each child’s communication style, sensory needs, strengths, interests, and developmental profile.',
   },
 ];
 

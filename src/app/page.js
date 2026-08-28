@@ -106,7 +106,6 @@ const specializedApproaches = [
   'Trauma-Informed Care',
   'Zones of Regulation',
   'Handwriting Without Tears',
-  'ASD Clinical Specialist',
 ];
 
 const testimonials = [
