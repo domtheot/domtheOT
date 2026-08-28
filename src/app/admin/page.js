@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Inbox,
@@ -10,62 +10,7 @@ import {
   Archive,
   MessageSquare,
   ArrowRight,
-  TrendingUp,
-  Clock,
 } from 'lucide-react';
-
-// Demo data
-const metrics = [
-  { label: 'Total Inquiries', value: '24', icon: Inbox, color: 'purple' },
-  { label: 'New', value: '5', icon: MessageSquare, color: 'green' },
-  { label: 'Contacted', value: '3', icon: UserCheck, color: 'amber' },
-  { label: 'Consultation Scheduled', value: '4', icon: Calendar, color: 'sage' },
-  { label: 'Active Clients', value: '8', icon: Users, color: 'magenta' },
-  { label: 'Closed', value: '4', icon: Archive, color: 'charcoal' },
-];
-
-const recentInquiries = [
-  {
-    id: 1,
-    name: 'Jennifer Adams',
-    service: 'Pediatric OT',
-    status: 'new',
-    date: '2026-08-12',
-    email: 'jennifer@email.com',
-  },
-  {
-    id: 2,
-    name: 'Marcus Thompson',
-    service: 'Doula Services',
-    status: 'contacted',
-    date: '2026-08-11',
-    email: 'marcus@email.com',
-  },
-  {
-    id: 3,
-    name: 'Aisha Williams',
-    service: 'Early Intervention',
-    status: 'new',
-    date: '2026-08-11',
-    email: 'aisha@email.com',
-  },
-  {
-    id: 4,
-    name: 'David Chen',
-    service: 'Pregnancy Support',
-    status: 'scheduled',
-    date: '2026-08-10',
-    email: 'david@email.com',
-  },
-  {
-    id: 5,
-    name: 'Rachel Garcia',
-    service: 'Pediatric OT',
-    status: 'new',
-    date: '2026-08-10',
-    email: 'rachel@email.com',
-  },
-];
 
 const statusConfig = {
   new: { label: 'New', className: 'status-badge--new' },
@@ -78,6 +23,37 @@ const statusConfig = {
 };
 
 export default function AdminDashboard() {
+  const [inquiries, setInquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        const response = await fetch('/api/inquiries');
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.error || 'Unable to load inquiries');
+        setInquiries(result.data || []);
+      } catch (loadError) {
+        setError(loadError.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadDashboard();
+  }, []);
+
+  const countStatus = (status) => inquiries.filter((inquiry) => inquiry.status === status).length;
+  const metrics = [
+    { label: 'Total Inquiries', value: inquiries.length, icon: Inbox, color: 'purple' },
+    { label: 'New', value: countStatus('new'), icon: MessageSquare, color: 'green' },
+    { label: 'Contacted', value: countStatus('contacted'), icon: UserCheck, color: 'amber' },
+    { label: 'Consultation Scheduled', value: countStatus('scheduled'), icon: Calendar, color: 'sage' },
+    { label: 'Active Clients', value: countStatus('client'), icon: Users, color: 'magenta' },
+    { label: 'Closed', value: countStatus('closed'), icon: Archive, color: 'charcoal' },
+  ];
+  const recentInquiries = inquiries.slice(0, 5);
+
   return (
     <div>
       <div className="admin-header">
@@ -92,6 +68,8 @@ export default function AdminDashboard() {
         </Link>
       </div>
 
+      {error && <div className="admin-notice" role="alert">{error}</div>}
+
       {/* Metrics */}
       <div className="metrics-grid">
         {metrics.map((metric) => (
@@ -102,7 +80,7 @@ export default function AdminDashboard() {
             >
               <metric.icon size={20} />
             </div>
-            <div className="card__stat-value">{metric.value}</div>
+            <div className="card__stat-value">{loading ? '—' : metric.value}</div>
             <div className="card__stat-label">{metric.label}</div>
           </div>
         ))}
@@ -132,23 +110,23 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentInquiries.map((inquiry) => (
+                {!loading && recentInquiries.map((inquiry) => (
                   <tr key={inquiry.id}>
                     <td>
-                      <div style={{ fontWeight: 600 }}>{inquiry.name}</div>
+                      <div style={{ fontWeight: 600 }}>{`${inquiry.first_name || ''} ${inquiry.last_name || ''}`.trim() || 'Anonymous'}</div>
                       <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-warm-gray)' }}>
                         {inquiry.email}
                       </div>
                     </td>
                     <td>{inquiry.service}</td>
                     <td>
-                      <span className={`status-badge ${statusConfig[inquiry.status].className}`}>
+                      <span className={`status-badge ${(statusConfig[inquiry.status] || statusConfig.new).className}`}>
                         <span className="status-badge__dot" />
-                        {statusConfig[inquiry.status].label}
+                        {(statusConfig[inquiry.status] || statusConfig.new).label}
                       </span>
                     </td>
                     <td style={{ color: 'var(--color-warm-gray)', fontSize: 'var(--text-sm)' }}>
-                      {inquiry.date}
+                      {inquiry.created_at?.slice(0, 10) || '—'}
                     </td>
                     <td>
                       <Link
@@ -160,6 +138,8 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 ))}
+                {loading && <tr><td colSpan="5" style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--color-warm-gray)' }}>Loading live inquiry data…</td></tr>}
+                {!loading && recentInquiries.length === 0 && <tr><td colSpan="5" style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--color-warm-gray)' }}>No inquiries have been submitted yet.</td></tr>}
               </tbody>
             </table>
           </div>
