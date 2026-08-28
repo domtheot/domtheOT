@@ -2518,22 +2518,21 @@ p {
 
 .doula-intro__inner {
   position: relative;
-  min-height: 470px;
+  min-height: 480px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .doula-intro__content {
-  width: min(100%, 760px);
+  width: min(100%, 720px);
   margin: 0 auto;
 }
 
 .doula-intro__brand {
   position: absolute;
-  top: 50%;
+  top: 0;
   right: clamp(var(--space-2), 2vw, var(--space-6));
   width: clamp(190px, 15vw, 230px);
-  transform: translateY(-50%);
   text-align: center;
 }
 
